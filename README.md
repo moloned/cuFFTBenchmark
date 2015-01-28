@@ -5,7 +5,7 @@ Snippet of code to measure performance of cuFFT for images of different sizes
 
 %> make bench FROMTO=\<fft_type\>
 
-<fft_type> should be one of Z2Z, Z2D, D2Z, C2C, C2R, R2C to specify the precision and any assumptions of Hermiticity.
+\<fft_type\> should be one of Z2Z, Z2D, D2Z, C2C, C2R, R2C to specify the precision and any assumptions of Hermiticity.
 
 
 *Run*

@@ -137,7 +137,6 @@ int main(void) {
     cudaEventRecord(stop);
     cudaEventSynchronize(stop);
     cudaEventElapsedTime(&elapsed, start, stop);
-    cufftDestroy(plan);
     cudaError_t err;
     err = cudaGetLastError();
     if (err) std::cout << NX << ", " << NY << " - Error " << err <<" : " <<
@@ -146,14 +145,17 @@ int main(void) {
                         std::endl;
     else std::cout << NX << ", " << NY << ", " << elapsed/5 << ", " 
               << 5*NX*NY/elapsed/1000/1000 << ", " << 5*5/elapsed/1000/1000*NX*NY*(log2(NX+0.000)+log2(NY+0.000)) << std::endl;
+    cufftDestroy(plan);
     std::cin >> NX >> NY;
     if (NX*NY > size) {
        std::cout << "Reallocating to " << NX << " x " << NY << std::endl;
-       cudaFree(data1);
+       cudaFree(data1); data1=0;
        cudaMalloc(&data1, sizeof(cufftDoubleComplex)*NX*NY);
+       if(!data1) std::cout << "Failed to allocate data1!" << std::endl;
 #ifndef INPLACE
-       cudaFree(data2);
+       cudaFree(data2); data2=0;
        cudaMalloc(&data2, sizeof(cufftDoubleComplex)*NX*NY);
+       if(!data2) std::cout << "Failed to allocate data2!\n" << std::endl;
 #endif
        size = NX*NY;
     }
